@@ -27,11 +27,11 @@ Qwen2-7B-Instruct was chosen because it's already a strong general-purpose codin
 | Avg salary per department | *(base often malformed/incomplete SQL)* | `SELECT department, AVG(salary) FROM employees GROUP BY department;` |
 | Products priced over 100 | *(often ignores schema columns)* | `SELECT * FROM products WHERE price > 100;` |
 
-*(fill in 3-5 real pairs from your local run)*
+*(fill in 3-5 real pairs — run `scripts/compare_examples.py` or the Colab cell to regenerate)*
 
 ## Adapter
 
-Trained adapter hosted on Hugging Face: **[zain-the-npc/qwen2-7b-sql-qlora](https://huggingface.co/zain-the-npc/qwen2-7b-sql-qlora)**
+Trained LoRA adapter, hosted on Hugging Face: **[zain-the-npc/qwen2-7b-sql-qlora](https://huggingface.co/zain-the-npc/qwen2-7b-sql-qlora)** (verified upload, 31.6 MB — adapter weights + tokenizer, no base model included).
 
 ```python
 from peft import PeftModel
