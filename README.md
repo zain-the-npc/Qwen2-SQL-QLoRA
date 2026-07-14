@@ -41,4 +41,5 @@ base = AutoModelForCausalLM.from_pretrained("Qwen/Qwen2-7B-Instruct", load_in_4b
 model = PeftModel.from_pretrained(base, "zain-the-npc/qwen2-7b-sql-qlora")
 ```
 
+
 ## Repo structure
