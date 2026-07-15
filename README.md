@@ -22,12 +22,19 @@ Qwen2-7B-Instruct was chosen because it's already a strong general-purpose codin
 
 ## Example predictions
 
-| Question | Base Output | Fine-tuned Output |
-|---|---|---|
-| Avg salary per department | *(base often malformed/incomplete SQL)* | `SELECT department, AVG(salary) FROM employees GROUP BY department;` |
-| Products priced over 100 | *(often ignores schema columns)* | `SELECT * FROM products WHERE price > 100;` |
+**Example 1 — ambiguous join column**
 
-*(fill in 3-5 real pairs — run `scripts/compare_examples.py` or the Colab cell to regenerate)*
+![Example 1](screenshots/ss-1.png)
+
+The question asks to match each employee's department via `manager_id` → `head_id`. The base model joins on `e.id = d.head_id` instead — comparing the employee's own ID to the department head ID, which is logically wrong and ignores `manager_id` entirely. The fine-tuned model correctly joins on `e.manager_id = d.head_id`, matching the intent of the question. This is a real reasoning error, not just a formatting difference — it's the kind of mistake that would silently return wrong results in production.
+
+**Example 2 — self-join, duplicate pairs**
+
+![Example 2](screenshots/ss-2.png)
+
+Both models correctly identify this as a self-join problem, but the base model filters with `e1.id != e2.id`, which returns every matching pair twice (A-B and B-A). The fine-tuned model uses `e1.id < e2.id`, which returns each pair exactly once — the correct behavior for a "find pairs" query. A subtle bug, but one that would double-count results if run for real.
+
+*(base outputs also wrap correct SQL in long prose/markdown explanations, making them harder to parse programmatically — likely a contributing factor to the low base execution accuracy, separate from these logic errors)*
 
 ## Adapter
 
@@ -41,5 +48,11 @@ base = AutoModelForCausalLM.from_pretrained("Qwen/Qwen2-7B-Instruct", load_in_4b
 model = PeftModel.from_pretrained(base, "zain-the-npc/qwen2-7b-sql-qlora")
 ```
 
-
 ## Repo structure
+
+```
+adapter/       # LoRA adapter weights
+scripts/       # training + eval scripts
+screenshots/   # base vs fine-tuned example outputs
+requirements.txt
+```
