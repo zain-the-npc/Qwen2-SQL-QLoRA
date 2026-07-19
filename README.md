@@ -9,7 +9,7 @@ Follow-up to my earlier [Adaptive-Gpt2-LoRA](link) project, where I hand-impleme
 | Model | Execution Accuracy |
 |---|---|
 | Base (Qwen2-7B-Instruct, no adapter) | 3.12% |
-| Fine-tuned (QLoRA adapter) | **57.29%** |
+| Fine-tuned (QLoRA adapter) | **57.29%** |  
 | Improvement | +54.17% |
 
 Evaluated on 100 held-out samples from [gretel-synthetic-text-to-sql](https://huggingface.co/datasets/gretelai/synthetic_text_to_sql), execution accuracy (predicted SQL run against schema, output compared to gold).
